@@ -4,7 +4,7 @@ pragma solidity ^0.8.10;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract ZrxAWallet is Ownable {
+contract ZrxWallet is Ownable {
     uint256 claimPeriod;
     mapping(address => uint256) private balance;
 
@@ -25,6 +25,15 @@ contract ZrxAWallet is Ownable {
         uint256 period = _newClaimPeriod * 1 days;
         claimPeriod = block.timestamp + period;
         emit newClaimPeriode(period);
+    }
+
+    function getEtherBalance()
+        public
+        view
+        onlyOwner
+        returns (uint256 balances)
+    {
+        balances = balance[msg.sender];
     }
 
     function depositEther() public payable onlyOwner {
