@@ -1,52 +1,42 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.10;
+pragma solidity 0.8.1;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 contract ZrxWallet is Ownable {
-    uint256 claimPeriod;
-    mapping(address => uint256) private balance;
+    using SafeERC20 for IERC20;
+    using SafeMath for uint256;
 
-    event newClaimPeriode(uint256);
-    event EtherDeposit(address _sender, uint256 _etherAmount);
+    event DepositEther(address sender, uint256 amount);
+    event WithdrawEther(address sender, uint256 amount);
+    event TransferEther(address sender, address to, uint256 amount);
 
-    constructor(uint256 _claimPeriod) {
-        claimPeriod = block.timestamp + (_claimPeriod * 1 days);
+    function depositEther() external payable onlyOwner {
+        require(msg.value > 0, "You must send ether to deposit");
+        emit DepositEther(msg.sender, msg.value);
     }
 
-    modifier onlyClaimPeriod() {
-        require(block.timestamp > claimPeriod);
-        _;
-    }
-
-    function updateClaimPeriod(uint256 _newClaimPeriod) public onlyOwner {
-        require(_newClaimPeriod > 0);
-        uint256 period = _newClaimPeriod * 1 days;
-        claimPeriod = block.timestamp + period;
-        emit newClaimPeriode(period);
-    }
-
-    function getEtherBalance()
-        public
-        view
-        onlyOwner
-        returns (uint256 balances)
-    {
-        balances = balance[msg.sender];
-    }
-
-    function depositEther() public payable onlyOwner {
-        require(msg.value > 0);
-        balance[msg.sender] += msg.value;
-        emit EtherDeposit(msg.sender, msg.value);
-    }
-
-    function withdrawEther(uint256 _etherAmount) public onlyOwner {
-        require(_etherAmount > 0);
-        require(balance[msg.sender] >= _etherAmount);
-        balance[msg.sender] -= _etherAmount;
-        (bool sent, ) = payable(msg.sender).call{value: _etherAmount}("");
+    function withdrawEther(uint256 amount) external onlyOwner {
+        require(amount > 0, "Amount must be greater than 0");
+        require(address(this).balance >= amount, "You don't have enough ether");
+        (bool sent, ) = msg.sender.call{value: amount}("");
         require(sent, "Ether transfer failed");
+    }
+
+    function transferEther(address payable to, uint256 amount)
+        external
+        payable
+        onlyOwner
+    {
+        require(amount > 0, "Amount must be greater than 0");
+        require(address(this).balance >= amount, "You don't have enough ether");
+        require(to != address(0), "You can't send ether to the null address");
+        (bool sent, ) = to.call{value: amount}("");
+        require(sent, "Ether transfer failed");
+        emit TransferEther(msg.sender, to, amount);
     }
 }
