@@ -1,10 +1,13 @@
 # exclude SafeMath when calculating test coverage
 # https://eth-brownie.readthedocs.io/en/v1.10.3/config.html#exclude_paths
+reports:
+  exclude_contracts:
+    - SafeMath
 depedencies:
   - OpenZeppelin/openzeppelin-contracts@4.5.0
 compiler:
   solc:
-    version: 0.8.10
+    version: 0.8.1
     optimizer:
       enabled: true
       runs: 200
@@ -13,10 +16,11 @@ compiler:
 networks:
   default: development
   mainnet-fork:
+    dai: "0x6B175474E89094C44Da98b954EedeAC495271d0F"
+    usdt: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
     cmd_settings:
-      unlock: 
-        - 0x748dE14197922c4Ae258c7939C7739f3ff1db573 #Dai Holder
-        - 0xcdE35b62c27d70b279cf7d0AA1212fFA9e938CEf #Ether Holder
+      unlock:
+        - 0x000000000000000000000000000000000000dEaD #burn address
 console:
   show_colors: true
   color_style: monokai

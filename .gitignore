@@ -4,3 +4,4 @@ __pycache__
 .hypothesis/
 build/
 reports/
+test_file.json
