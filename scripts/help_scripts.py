@@ -1,4 +1,5 @@
-from brownie import network, accounts, config, web3, Contract
+from brownie import network, accounts, config, web3, interface, Contract
+import json
 
 
 def get_account():
@@ -23,3 +24,19 @@ def fund_token(wallet):
     tx = token.transfer(
         wallet, web3.toWei("500", "ether"), {"from": accounts[10]}
     )
+
+
+def get_aToken_balance(tokenAddress, wallet):
+    token = interface.IERC20(tokenAddress)
+    return token.balanceOf(wallet)
+
+
+def get_token_data():
+    token = []
+    atoken = []
+    with open("scripts/aave-mainnet.json", "r") as data:
+        aave_address = json.load(data)
+    for i in range(len(aave_address)):
+        token.append(aave_address[i]["address"])
+        atoken.append(aave_address[i]["aTokenAddress"])
+    return token, atoken
