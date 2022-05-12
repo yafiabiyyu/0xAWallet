@@ -18,6 +18,8 @@ networks:
   mainnet-fork:
     dai: "0x6B175474E89094C44Da98b954EedeAC495271d0F"
     usdt: "0xdAC17F958D2ee523a2206206994597C13D831ec7"
+    LendingPoolAddressProvider: "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5"
+    LendingPoolAddress: "0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9"
     cmd_settings:
       unlock:
         - 0x000000000000000000000000000000000000dEaD #burn address
