@@ -2,7 +2,12 @@
 
 import pytest
 from brownie import web3, accounts, config, network, Contract
-from scripts.help_scripts import get_account, fund_wallet, fund_token
+from scripts.help_scripts import (
+    get_account,
+    fund_wallet,
+    fund_token,
+    get_token_data,
+)
 
 
 @pytest.fixture(scope="function", autouse=True)
@@ -37,4 +42,5 @@ def nonOwner():
 
 @pytest.fixture(scope="module")
 def contract(ZrxWallet, account):
-    return ZrxWallet.deploy({"from": account[1]})
+    token, atoken = get_token_data()
+    return ZrxWallet.deploy(token, atoken, {"from": account[1]})
