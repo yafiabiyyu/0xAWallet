@@ -34,7 +34,7 @@ def get_aToken_balance(tokenAddress, wallet):
 def get_token_data():
     token = []
     atoken = []
-    with open("scripts/aave-mainnet.json", "r") as data:
+    with open("scripts/aave-kovan.json", "r") as data:
         aave_address = json.load(data)
     for i in range(len(aave_address)):
         token.append(aave_address[i]["address"])

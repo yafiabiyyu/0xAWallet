@@ -15,6 +15,20 @@ compiler:
       - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.5.0"
 networks:
   default: development
+  ropsten:
+    dai: "0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD"
+    aweth: "0x87b1f4cf9BD63f7BBD3eE1aD04E8F52540349347"
+    LendingPoolAddressProvider: "0x88757f2f99175387aB4C6a4b3067c77A695b0349"
+    LendingPoolAddress: "0xE0fBa4Fc209b4948668006B2bE61711b7f465bAe"
+    WethGateway: "0xA61ca04DF33B72b235a8A28CfB535bb7A5271B70"
+    verify: True
+  kovan:
+    dai: "0xFf795577d9AC8bD7D90Ee22b6C1703490b6512FD"
+    aweth: "0x87b1f4cf9BD63f7BBD3eE1aD04E8F52540349347"
+    LendingPoolAddressProvider: "0x88757f2f99175387aB4C6a4b3067c77A695b0349"
+    LendingPoolAddress: "0xE0fBa4Fc209b4948668006B2bE61711b7f465bAe"
+    WethGateway: "0xA61ca04DF33B72b235a8A28CfB535bb7A5271B70"
+    verify: True
   mainnet-fork:
     dai: "0x6B175474E89094C44Da98b954EedeAC495271d0F"
     usdt: "0xdAC17F958D2ee523a2206206994597C13D831ec7"

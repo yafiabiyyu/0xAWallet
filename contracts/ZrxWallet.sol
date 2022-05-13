@@ -16,16 +16,10 @@ contract ZrxWallet is Ownable {
     using SafeERC20 for IERC20;
     using SafeMath for uint256;
 
-    ILendingPoolAddressesProvider poolProvider =
-        ILendingPoolAddressesProvider(
-            0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5
-        );
-    ILendingPool pool =
-        ILendingPool(0x7d2768dE32b0b80b7a3454c06BdAc94A69DDc7A9);
-    IWETHGateway wethGateway =
-        IWETHGateway(0xcc9a0B7c43DC2a5F023Bb9b738E45B0Ef6B06E04);
-    IERC20 aWeth = IERC20(0x030bA81f1c18d280636F32af80b9AAd02Cf0854e);
-
+    IWETHGateway wethGateway;
+    ILendingPool pool;
+    ILendingPoolAddressesProvider poolProvider;
+    IERC20 aWeth;
     mapping(address => address) private tokenToaToken;
 
     event DepositEther(address sender, uint256 amount);
@@ -77,7 +71,14 @@ contract ZrxWallet is Ownable {
         _;
     }
 
-    constructor(address[] memory tokens, address[] memory atokens) {
+    constructor(
+        address[] memory tokens,
+        address[] memory atokens,
+        address ilendingPoolAddressProvider,
+        address ilendingPool,
+        address wethgateway,
+        address aweth
+    ) {
         require(
             tokens.length == atokens.length,
             "Tokens and addresses must be equal"
@@ -85,6 +86,12 @@ contract ZrxWallet is Ownable {
         for (uint256 i = 0; i < tokens.length; i++) {
             tokenToaToken[tokens[i]] = atokens[i];
         }
+        poolProvider = ILendingPoolAddressesProvider(
+            ilendingPoolAddressProvider
+        );
+        pool = ILendingPool(ilendingPool);
+        wethGateway = IWETHGateway(wethgateway);
+        aWeth = IERC20(aweth);
     }
 
     function depositEther() external payable onlyOwner {
